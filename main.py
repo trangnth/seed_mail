@@ -1,12 +1,8 @@
-from operator import ge
 import sys
 import time
-import argparse
 
 import asyncio
 import threading
-
-from imapclient.response_parser import parse_response
 
 from src.libs.logger import logger
 from src.libs.arguments import args
@@ -40,26 +36,46 @@ def imap_new_message():
     imap.new_message(client)
 
 
-def get_arg(send, add, new):
+def imap_delete_message(folder: str):
+    logger.info("Main thread name: {}"
+                .format(threading.current_thread().name))
+    import imaplib
+    client = imaplib.IMAP4(ImapConfig.host, ImapConfig.port)
+    client.starttls()
+    client.login(ImapConfig.user,ImapConfig.password)
+    imap.delete(client, folder)   
+
+
+def get_arg(send, add, new, delete):
     mapping_func = {
         send: send_new_message,
         add: imap_add_message_to_sent,
         new: imap_new_message
     }
+    delete_mail = {
+        delete: imap_delete_message
+    }
     number_of_message = max(mapping_func.keys())
     func = mapping_func.get(number_of_message)
-    return number_of_message, func
+    folder = None
+    if delete:
+        folder = delete
+        func = delete_mail.get(delete)
+
+    return number_of_message, func, folder
 
 
-async def main(number_of_message, func):
+async def main(number_of_message: int, func, folder=None):
     loop = asyncio.get_running_loop()
+    if folder:
+        loop.run_in_executor(None, func, folder)
     for _ in range(number_of_message):
         loop.run_in_executor(None, func)
 
 
 if __name__ == '__main__':
-    number_of_message, func = get_arg(**args.__dict__)
+    number_of_message, func, folder = get_arg(**args.__dict__)
     s = time.perf_counter()
-    asyncio.run(main(number_of_message, func))
+    asyncio.run(main(number_of_message, func, folder))
     elapsed = time.perf_counter() - s
     logger.info(f"{__file__} EXECUTED IN {elapsed:0.5f} SECONDS.")

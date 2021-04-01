@@ -25,4 +25,13 @@ arg.add_argument(
     default=0,
     help="imap new X messages (default: X = 0)",
 )
+
+arg.add_argument(
+    "-d",
+    "--delete",
+    type=str,
+    default="",
+    help="delete messages in a folder (default: folder = None)"
+
+)
 args = parser.parse_args()

@@ -10,3 +10,4 @@ six==1.15.0
 toml==0.10.2
 typed-ast==1.4.2
 typing-extensions==3.7.4.3
+-e git+https://github.com/cuonglm/pyzmail@0c3b7da3aa1b066e8f057e041601dbdfdb14f150#egg=pyzmail&subdirectory=pyzmail

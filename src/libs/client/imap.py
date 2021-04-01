@@ -3,6 +3,7 @@ from src.libs.logger import logger
 from imapclient import IMAPClient
 from src.configuration.imapconfig import ImapConfig
 from src.configuration.domain import DomainConfig
+import pyzmail
 
 
 SEEN = b"\\Seen"
@@ -12,7 +13,14 @@ DRAFT = b"\\Draft"
 DRAFT_FROM_WEBMAIL = "$DRAFT_FROM_WEBMAIL"
 
 SEARCH_CRITERIA_BY_MESSAGE_HEADER_ID = 'HEADER "Message-ID" "{}"'
+BODY = 'BODY[]'
+MESSAGE_ID = 'BODY[HEADER.FIELDS (MESSAGE-ID)]'
+FLAGS = 'FLAGS'
+INTERNALDATE = 'INTERNALDATE'
 
+FIELDS = [
+    BODY
+]
 
 def generate_message_id(suffix=f"@{DomainConfig.domain}"):
     if not isinstance(suffix, str):
@@ -73,4 +81,16 @@ def send_message(client, payload, folder_name=None):
         return True
     except Exception as e:
         logger.error("Could not create new message: %r", e)
+        return False
+
+
+def delete(client, folder):
+    try:
+        client.select(folder)
+        typ, data = client.search(None, 'ALL')
+        for num in data[0].split():
+            client.store(num, '+FLAGS', '\\Deleted')
+        client.expunge()
+    except Exception as e:
+        logger.error("Could not delete message: %r", e)
         return False
