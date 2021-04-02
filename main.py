@@ -70,7 +70,10 @@ async def main(number_of_message: int, func, folder=None):
     loop = asyncio.get_running_loop()
     if folder:
         loop.run_in_executor(None, func, folder)
-    executor = ThreadPoolExecutor(max_workers=number_of_message)
+
+    executor = None
+    if number_of_message > 0:
+        executor = ThreadPoolExecutor(max_workers=number_of_message)
     for _ in range(number_of_message):
         loop.run_in_executor(executor, func)
 
