@@ -44,7 +44,7 @@ def imap_delete_message(folder: str):
     client = imaplib.IMAP4(ImapConfig.host, ImapConfig.port)
     client.starttls()
     client.login(ImapConfig.user,ImapConfig.password)
-    imap.delete(client, folder)   
+    imap.delete(client, folder)
 
 
 def get_arg(send, add, new, delete):
