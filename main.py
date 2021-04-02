@@ -9,6 +9,7 @@ from src.libs.arguments import args
 from src.libs.client import imap, smtp
 from src.configuration.smtpconfig import SmtpConfig
 from src.configuration.imapconfig import ImapConfig
+from concurrent.futures import ThreadPoolExecutor
 
 sys.tracebacklimit = 0
 
@@ -69,8 +70,9 @@ async def main(number_of_message: int, func, folder=None):
     loop = asyncio.get_running_loop()
     if folder:
         loop.run_in_executor(None, func, folder)
+    executor = ThreadPoolExecutor(max_workers=number_of_message)
     for _ in range(number_of_message):
-        loop.run_in_executor(None, func)
+        loop.run_in_executor(executor, func)
 
 
 if __name__ == '__main__':
