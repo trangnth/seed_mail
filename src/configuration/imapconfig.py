@@ -11,4 +11,4 @@ class ImapConfig:
     user = os.getenv("IMAP_USER")
     password = os.getenv("IMAP_PASSWORD")
 
-    payload = os.getenv("SMTP_PAYLOAD")
+    payload = os.getenv("IMAP_PAYLOAD")
