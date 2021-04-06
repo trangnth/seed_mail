@@ -14,3 +14,7 @@ class SmtpConfig:
 
     rcpt_to = os.getenv("RCPT_TO")
     payload = os.getenv("SMTP_PAYLOAD")
+
+    recipients = os.getenv("SMTP_RECIPIENTS")
+    cc = os.getenv("CC")
+    bcc = os.getenv("BCC")

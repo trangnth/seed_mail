@@ -7,7 +7,15 @@ arg.add_argument(
     "--send",
     type=int,
     default=0,
-    help="send X messages (default: X = 0)",
+    help="send X mail (default: X = 0)",
+)
+
+arg.add_argument(
+    "-sz",
+    "--sendz",
+    type=int,
+    default=0,
+    help="send X messages with pyzmail (default: X = 0)",
 )
 
 arg.add_argument(
@@ -31,7 +39,6 @@ arg.add_argument(
     "--delete",
     type=str,
     default="",
-    help="delete messages in a folder (default: folder = None)"
-
+    help="delete messages in a folder (default: folder = None)",
 )
 args = parser.parse_args()

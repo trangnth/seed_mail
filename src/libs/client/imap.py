@@ -3,7 +3,6 @@ from src.libs.logger import logger
 from imapclient import IMAPClient
 from src.configuration.imapconfig import ImapConfig
 from src.configuration.domain import DomainConfig
-import pyzmail
 
 
 SEEN = b"\\Seen"
