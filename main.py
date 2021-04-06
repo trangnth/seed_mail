@@ -10,7 +10,6 @@ from src.libs.client import imap, smtp
 from src.configuration.smtpconfig import SmtpConfig
 from src.configuration.imapconfig import ImapConfig
 from concurrent.futures import ThreadPoolExecutor
-import pyzmail
 import imaplib
 
 sys.tracebacklimit = 0
@@ -21,39 +20,6 @@ def send_new_mail():
                 .format(threading.current_thread().name))
     rcpt_to = SmtpConfig.rcpt_to.split(",")
     smtp.send_mail(SmtpConfig.user, rcpt_to, SmtpConfig.payload)
-
-
-def send_mail_with_pyzmail():
-    logger.info("Main thread name: {}"
-                .format(threading.current_thread().name))
-    recipients = SmtpConfig.recipients.split(",")
-    cc = SmtpConfig.cc.split(",")
-    bcc = SmtpConfig.bcc.split(",")
-    raw_payload, mail_from, rcpt_to, mail_id = pyzmail.compose_mail(
-            sender = SmtpConfig.user,
-            recipients=recipients,
-            subject=SmtpConfig.payload,
-            default_charset='UTF-8',
-            text=("", 'UTF-8'),
-            html=("" , 'UTF-8'),
-            cc=cc,
-            bcc=bcc,
-        )
-
-    pyzmail.send_mail(raw_payload, mail_from, rcpt_to, SmtpConfig.host,
-                      SmtpConfig.port, SmtpConfig.mode, SmtpConfig.user,
-                      SmtpConfig.password)
-
-    pyzmail.compose_mail(
-        sender=SmtpConfig.user,
-        recipients=recipients,
-        subject=SmtpConfig.payload,
-        default_charset='UTF-8',
-        text=("", 'UTF-8'),
-        html=("", 'UTF-8'),
-        cc=cc,
-        bcc=bcc,
-    )
 
 
 def imap_add_message_to_sent():
@@ -81,10 +47,9 @@ def imap_delete_message(folder: str):
     imap.delete(client, folder)
 
 
-def get_arg(send, sendz, add, new, delete):
+def get_arg(send, add, new, delete):
     mapping_func = {
         send: send_new_mail,
-        sendz: send_mail_with_pyzmail,
         add: imap_add_message_to_sent,
         new: imap_new_message
     }

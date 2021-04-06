@@ -11,14 +11,6 @@ arg.add_argument(
 )
 
 arg.add_argument(
-    "-sz",
-    "--sendz",
-    type=int,
-    default=0,
-    help="send X messages with pyzmail (default: X = 0)",
-)
-
-arg.add_argument(
     "-a",
     "--add",
     type=int,
