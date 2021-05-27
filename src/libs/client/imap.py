@@ -75,6 +75,9 @@ def send_message(client, payload, folder_name=None):
     try:
         if not folder_name:
             folder_name = "Sent"
+        uniq_id = generate_message_id()
+        body = f"Message-ID: {uniq_id}"
+        payload = body + "\n" + payload
         client.select_folder(folder_name)
         client.append(folder_name, payload, flags=(SEEN, SENT_FROM_WEBMAIL))
         return True
