@@ -28,10 +28,11 @@ def generate_message_id(suffix=f"@{DomainConfig.domain}"):
     return "".join(["<", str(uuid.uuid4()) + suffix, ">"])
 
 
-def new_message(client, folder="Drafts", flags=(DRAFT, DRAFT_FROM_WEBMAIL)):
+def new_message(client, payload, folder="Drafts", flags=(DRAFT, DRAFT_FROM_WEBMAIL)):
     try:
         uniq_id = generate_message_id()
         body = f"Message-ID: {uniq_id}"
+        body = body + "\n" + payload
         client.select_folder(folder)
         client.append(folder, body, flags=flags)
         res = client.search(

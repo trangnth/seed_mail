@@ -1,5 +1,6 @@
 import sys
 import time
+import time
 
 import asyncio
 import threading
@@ -35,7 +36,7 @@ def imap_new_message():
                 .format(threading.current_thread().name))
     client = imap.new_imap_client()
     imap.login(client)
-    imap.new_message(client)
+    imap.new_message(client, ImapConfig.payload)
 
 
 def imap_delete_message(folder: str):
@@ -72,7 +73,8 @@ async def main(number_of_message: int, func, folder=None):
 
     executor = None
     if number_of_message > 0:
-        executor = ThreadPoolExecutor(max_workers=number_of_message)
+        executor = ThreadPoolExecutor(max_workers=10)
+        time.sleep(1)
     for _ in range(number_of_message):
         loop.run_in_executor(executor, func)
 
