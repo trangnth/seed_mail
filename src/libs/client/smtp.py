@@ -34,6 +34,7 @@ def send_mail(mail_from: str, rcpt_to: List[str], payload: str):
             # python 3.x
             smtp.login(SmtpConfig.user, SmtpConfig.password)
     try:
+        payload = payload.encode("utf-8")
         ret = smtp.sendmail(mail_from, rcpt_to, payload)
         print (payload)
     finally:
