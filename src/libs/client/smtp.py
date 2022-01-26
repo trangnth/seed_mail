@@ -4,6 +4,7 @@ from typing import List
 from src.configuration.smtpconfig import SmtpConfig
 from src.configuration.domain import DomainConfig
 import sys
+from datetime import datetime
 
 def generate_message_id(suffix=f"@{DomainConfig.domain}"):
     if not isinstance(suffix, str):
@@ -14,7 +15,8 @@ def generate_message_id(suffix=f"@{DomainConfig.domain}"):
 def send_mail(mail_from: str, rcpt_to: List[str], payload: str):
     uniq_id = generate_message_id()
     body = f"Message-ID: {uniq_id}"
-    payload = body + "\n" + payload
+    date = datetime.now().strftime("%a, %d %b %Y %T %C +0700")
+    payload = body + "\n" + "Date: " + date + "\n" + payload
     if SmtpConfig.mode == "ssl":
         smtp = smtplib.SMTP_SSL(SmtpConfig.host, SmtpConfig.port)
     else:
