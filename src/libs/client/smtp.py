@@ -15,7 +15,7 @@ def generate_message_id(suffix=f"@{DomainConfig.domain}"):
 def send_mail(mail_from: str, rcpt_to: List[str], payload: str):
     uniq_id = generate_message_id()
     body = f"Message-ID: {uniq_id}"
-    date = datetime.now().strftime("%a, %d %b %Y %T %C +0700")
+    date = datetime.now().strftime("%a, %d %b %Y %T +0700")
     payload = body + "\n" + "Date: " + date + "\n" + payload
     if SmtpConfig.mode == "ssl":
         smtp = smtplib.SMTP_SSL(SmtpConfig.host, SmtpConfig.port)
