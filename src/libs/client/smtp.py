@@ -38,11 +38,11 @@ def send_mail(mail_from: str, rcpt_to: List[str], payload: str):
     try:
         payload = payload.encode("utf-8")
         ret = smtp.sendmail(mail_from, rcpt_to, payload)
-        print (payload)
+#        print (payload)
     finally:
         try:
             smtp.quit()
         except Exception as e:
-            pass
+            print("ERROR - %s", e)
 
     return ret
